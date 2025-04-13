@@ -1,20 +1,21 @@
 pipeline {
-  agent {
-   dockerfile true
-  }
-  stages {
-    stage('Test') {
-      steps {
-        sh 'nginx -v'
-      }
-		}
-		stage('Start container') {
-      steps {
-        sh 'docker compose up -d'
-        sh 'docker compose ps'
-      }
+    agent {
+        dockerfile {
+            filename 'Dockerfile'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
     }
-
-  }
-
+    stages {
+        stage('Test') {
+            steps {
+                sh 'nginx -v'
+            }
+        }
+        stage('Start container') {
+            steps {
+                sh 'docker compose up -d'
+                sh 'docker compose ps'
+            }
+        }
+    }
 }
