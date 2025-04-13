@@ -28,6 +28,7 @@ pipeline {
             steps {
                 sh 'docker compose up -d --no-color --wait --build'
                 sh 'docker compose ps'
+                sh 'docker images some-web-site' // Add this to verify the image exists
             }
         }
         stage('Пуш образа в Docker Hub') {
@@ -35,8 +36,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: '378d7de3-9397-4bc8-8a2b-e63a47d49fde', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker tag some-web-site amex225/task16
-                        docker push amex225/task16
+                        docker tag some-web-site:latest amex225/task16:latest
+                        docker push amex225/task16:latest
                     '''
                 }
             }
