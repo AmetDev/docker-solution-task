@@ -5,5 +5,5 @@ COPY html/ /usr/share/nginx/html
 
 RUN nginx -t
 
-EXPOSE 80 
+EXPOSE 80
 
