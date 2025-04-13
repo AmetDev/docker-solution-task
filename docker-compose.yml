@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: some-web-site:latest
     ports:
       - '8081:80'
     container_name: some-web-site
