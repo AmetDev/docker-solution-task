@@ -18,13 +18,14 @@ pipeline {
                     docker compose down --remove-orphans || true
                     docker rm -f some-web-site || true
                     docker image rm some-web-site || true
+                    docker compose rm -f || true
                     docker image prune -f || true
                 '''
             }
         }
         stage('Запуск контейнера') {
             steps {
-                sh 'docker compose up -d --no-color --wait'
+                sh 'docker compose up -d --no-color --wait --build'
                 sh 'docker compose ps'
             }
         }
