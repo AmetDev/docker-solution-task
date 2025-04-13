@@ -10,9 +10,9 @@ pipeline {
         }
         stage('Build and run container') {
             steps {
-                sh 'docker build -t some-web-site .'
-                sh 'docker run -d --name some-web-site -p 8081:80 --restart unless-stopped some-web-site'
-                sh 'docker ps -f name=some-web-site'
+                sh 'sudo docker build -t some-web-site .'
+                sh 'sudo docker run -d --name some-web-site -p 8081:80 --restart unless-stopped some-web-site'
+                sh 'sudo docker ps -f name=some-web-site'
             }
         }
     }
