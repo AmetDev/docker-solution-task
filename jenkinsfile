@@ -1,7 +1,7 @@
 pipeline {
     agent {
         dockerfile {
-            filename 'Dockerfile'
+            filename 'Dockerfile.jenkins'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -11,10 +11,11 @@ pipeline {
                 sh 'nginx -v'
             }
         }
-        stage('Start container') {
+        stage('Build and run container') {
             steps {
-                sh 'docker compose up -d'
-                sh 'docker compose ps'
+                sh 'docker build -t some-web-site -f Dockerfile .'
+                sh 'docker run -d --name some-web-site -p 8081:80 --restart unless-stopped some-web-site'
+                sh 'docker ps -f name=some-web-site'
             }
         }
     }
