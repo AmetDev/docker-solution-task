@@ -12,11 +12,12 @@ pipeline {
                 '''
             }
         }
-        stage('Очистка старых контейнеров') {
+        stage('Очистка старых контейнеров и образов') {
             steps {
                 sh '''
                     docker compose down --remove-orphans || true
                     docker rm -f some-web-site || true
+                    docker image rm some-web-site || true
                 '''
             }
         }
