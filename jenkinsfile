@@ -1,17 +1,28 @@
 pipeline {
-    agent any
-    stages {
-        stage('Test') {
-            steps {
-                sh 'nginx -v'
-            }
-        }
-        stage('Build and run container') {
-            steps {
-                sh 'docker build -t some-web-site .'
-                sh 'docker run -d --name some-web-site -p 8081:80 --restart unless-stopped some-web-site'
-                sh 'docker ps -f name=some-web-site'
-            }
-        }
+  agent any
+  stages {
+    stage("verify tooling") {
+      steps {
+        sh '''
+          docker version
+          docker info
+          docker compose version 
+          curl --version
+          jq --version
+        '''
+      }
     }
+    stage('Start container') {
+      steps {
+        sh 'docker compose up -d --no-color --wait'
+        sh 'docker compose ps'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'docker compose down --remove-orphans -v'
+      sh 'docker compose ps'
+    }
+  }
 }
