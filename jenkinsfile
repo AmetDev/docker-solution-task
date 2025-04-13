@@ -7,6 +7,14 @@ pipeline {
       steps {
         sh 'nginx -v'
       }
+		}
+		stage('Start container') {
+      steps {
+        sh 'docker compose up -d'
+        sh 'docker compose ps'
+      }
     }
+
   }
+
 }
