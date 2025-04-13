@@ -1,23 +1,30 @@
 pipeline {
-  agent any
-  stages {
-    stage("verify tooling") {
-      steps {
-        sh '''
-          docker version
-          docker info
-          docker compose version 
-          curl --version
-          jq --version
-        '''
-      }
+    agent any
+    stages {
+        stage('Проверка инструментов') {
+            steps {
+                sh '''
+                    docker version
+                    docker info
+                    docker compose version
+                    curl --version
+                    jq --version
+                '''
+            }
+        }
+        stage('Очистка старых контейнеров') {
+            steps {
+                sh '''
+                    docker compose down --remove-orphans || true
+                    docker rm -f some-web-site || true
+                '''
+            }
+        }
+        stage('Запуск контейнера') {
+            steps {
+                sh 'docker compose up -d --no-color --wait'
+                sh 'docker compose ps'
+            }
+        }
     }
-    stage('Start container') {
-      steps {
-        sh 'docker compose up -d --no-color --wait'
-        sh 'docker compose ps'
-      }
-    }
-  }
- 
 }
